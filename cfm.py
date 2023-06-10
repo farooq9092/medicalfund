@@ -15,10 +15,10 @@ def calculate_total_sum():
         reader = csv.reader(file)
         for row in reader:
             if row and row[2].replace('.', '').isdigit():
-                total_sum += float(row[2]) 
+                total_sum += float(row[2])
     return round(total_sum, 2)
 
-# Function to delete the record of a personss
+# Function to delete the record of a person
 def delete_record(name):
     rows = []
     with open("charity_fund_data.csv", "r") as file:
@@ -42,13 +42,16 @@ def download_csv():
 
 # Function to display the Streamlit app
 def main():
-    # Add background image
+    # Add background image and customize main heading color
     st.markdown(
         """
         <style>
             body {
                 background-image: url('images.jpeg');
                 background-size: cover;
+            }
+            .title {
+                color: green;
             }
         </style>
         """,
