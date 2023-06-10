@@ -1,17 +1,5 @@
 import csv
 import streamlit as st
-import base64
-
-# Set page config to wide layout
-st.set_page_config(layout="wide")
-
-# Link to the CSS file for background image
-st.markdown(
-    """
-    <link rel="stylesheet" type="text/css" href="styles.css">
-    """,
-    unsafe_allow_html=True
-)
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
@@ -42,22 +30,6 @@ def delete_record(name):
     with open("charity_fund_data.csv", "w", newline="") as file:
         writer = csv.writer(file)
         writer.writerows(rows)
-
-# Function to download the data as CSV
-def download_csv():
-    with open("charity_fund_data.csv", "r") as file:
-        csv_data = file.read()
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:text/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
-    return href
-
-# Function to download the data as TXT
-def download_txt():
-    with open("charity_fund_data.csv", "r") as file:
-        txt_data = file.read()
-    b64 = base64.b64encode(txt_data.encode()).decode()
-    href = f'<a href="data:text/plain;base64,{b64}" download="charity_data.txt">Download TXT File</a>'
-    return href
 
 # Display the Streamlit app
 def main():
@@ -91,13 +63,15 @@ def main():
         delete_record(delete_name)
         st.success("Record deleted successfully!")
 
-    # Download options
+    # Provide external download links
     if st.button("Download CSV"):
-        href = download_csv()
-        st.markdown(href, unsafe_allow_html=True)
+        st.markdown("Download CSV file from the link below:")
+        csv_link = "https://your-cloud-storage-service.com/charity_data.csv"
+        st.markdown(f"[Download CSV](csv_link)")
     if st.button("Download TXT"):
-        href = download_txt()
-        st.markdown(href, unsafe_allow_html=True)
+        st.markdown("Download TXT file from the link below:")
+        txt_link = "https://your-cloud-storage-service.com/charity_data.txt"
+        st.markdown(f"[Download TXT](txt_link)")
 
 # Run the Streamlit app
 if __name__ == "__main__":
