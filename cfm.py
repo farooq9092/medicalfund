@@ -1,7 +1,8 @@
 import csv
 import streamlit as st
+import base64
 
-# Function to save the data of people receiving medicinee
+# Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
     with open("charity_fund_data.csv", "a", newline="") as file:
         writer = csv.writer(file)
@@ -31,6 +32,14 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
+# Function to download the CSV file
+def download_csv():
+    with open("charity_fund_data.csv", "r") as file:
+        csv_data = file.read()
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    return href
+
 # Function to display the Streamlit app
 def main():
     # Add background image using CSS
@@ -38,7 +47,7 @@ def main():
         """
         <style>
             body {
-                background-image: url('https://www.shutterstock.com/image-photo/helping-hands-doctor-womans-hand-holding-607174019');
+                background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fsearch%2Fdoctors-helping-poor&psig=AOvVaw0pSJcoey4d2IYuKX7wZbWR&ust=1686506125059000&source=images&cd=vfe&ved=0CA4QjRxqFwoTCKiAgJWjuf8CFQAAAAAdAAAAABAD');
                 background-size: cover;
             }
         </style>
@@ -77,6 +86,10 @@ def main():
     if st.button("Delete Record"):
         delete_record(delete_name)
         st.success("Record deleted successfully!")
+
+    # Download CSV file
+    download_link = download_csv()
+    st.markdown(download_link, unsafe_allow_html=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
