@@ -1,38 +1,14 @@
 import csv
 import streamlit as st
+import base64
 
 # Set page config to wide layout
 st.set_page_config(layout="wide")
 
-# Add CSS styling to set the background image and position the input fields
+# Link to the CSS file for background image
 st.markdown(
     """
-    <style>
-    .container {
-        position: relative;
-        width: 100%;
-        height: 100%;
-    }
-    .background-image {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-    }
-    .form-container {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-        z-index: 1;
-    }
-    </style>
+    <link rel="stylesheet" type="text/css" href="styles.css">
     """,
     unsafe_allow_html=True
 )
@@ -67,7 +43,23 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
-# Function to display the Streamlit app
+# Function to download the data as CSV
+def download_csv():
+    with open("charity_fund_data.csv", "r") as file:
+        csv_data = file.read()
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    return href
+
+# Function to download the data as TXT
+def download_txt():
+    with open("charity_fund_data.csv", "r") as file:
+        txt_data = file.read()
+    b64 = base64.b64encode(txt_data.encode()).decode()
+    href = f'<a href="data:text/plain;base64,{b64}" download="charity_data.txt">Download TXT File</a>'
+    return href
+
+# Display the Streamlit app
 def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Enter the details of the medicine distribution:")
@@ -99,17 +91,13 @@ def main():
         delete_record(delete_name)
         st.success("Record deleted successfully!")
 
-    # Download the CSV file when the "Download CSV" button is clicked
+    # Download options
     if st.button("Download CSV"):
-        csv_data = open("charity_fund_data.csv", "r").read()
-        b64 = base64.b64encode(csv_data.encode()).decode()
-        href = f'<a href="data:file/csv;base64,{b64}" download="charity_fund_data.csv">Download CSV File</a>'
+        href = download_csv()
         st.markdown(href, unsafe_allow_html=True)
-
-    # Download the CSV file on mobile devices
-    if st.button("Download CSV (Mobile)"):
-        st.markdown("Downloading CSV file...")
-        st.markdown('<a href="charity_fund_data.csv" download>Click here to download the CSV file</a>', unsafe_allow_html=True)
+    if st.button("Download TXT"):
+        href = download_txt()
+        st.markdown(href, unsafe_allow_html=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
