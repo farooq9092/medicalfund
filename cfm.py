@@ -1,6 +1,5 @@
 import csv
 import streamlit as st
-import base64
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
@@ -32,33 +31,24 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
-# Function to download the CSV file
-def download_csv():
-    with open("charity_fund_data.csv", "r") as file:
-        csv_data = file.read()
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="charity_fund_data.csv">Download CSV File</a>'
-    return href
-
 # Function to display the Streamlit app
 def main():
-    # Add background image and customize main heading color
+    # Add background image using CSS
     st.markdown(
         """
         <style>
             body {
-                background-image: url('images.jpeg');
+                background-image: url('https://www.shutterstock.com/image-photo/helping-hands-doctor-womans-hand-holding-607174019');
                 background-size: cover;
-            }
-            .title {
-                color: green;
             }
         </style>
         """,
         unsafe_allow_html=True
     )
 
+    # Customize main heading color
     st.title("Monthly Charity Fund for Poor People")
+    st.markdown("<style>.title { color: green; }</style>", unsafe_allow_html=True)
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
@@ -87,11 +77,6 @@ def main():
     if st.button("Delete Record"):
         delete_record(delete_name)
         st.success("Record deleted successfully!")
-
-    # Download the CSV file when the "Download" button is clicked
-    if st.button("Download CSV"):
-        href = download_csv()
-        st.markdown(href, unsafe_allow_html=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
