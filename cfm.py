@@ -3,8 +3,8 @@ import pandas as pd
 import requests
 
 GITHUB_API = 'https://api.github.com'
-OWNER = 'your_github_username'
-REPO = 'your_repository_name'
+OWNER = 'farooq9092'
+REPO = 'cmf'
 BRANCH = 'main'
 FILE_PATH = 'charity_fund_data.csv'
 
