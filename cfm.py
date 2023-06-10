@@ -22,7 +22,7 @@ def main():
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
-    name = st.text_input("Distributor Name")
+    name = st.text_input("Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
 
