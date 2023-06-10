@@ -1,6 +1,41 @@
 import csv
 import streamlit as st
 import base64
+# Set page config to wide layout
+st.set_page_config(layout="wide")
+
+# Add CSS styling to set the background image and position the input fields
+st.markdown(
+    """
+    <style>
+    .container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    .background-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+    .form-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
@@ -60,6 +95,15 @@ def main():
 
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Enter the details of the medicine distribution:")
+      # Add your image file name in the background image URL
+    image_file = "Aafia-Siddiqui.jpg"
+    
+    # Create a container for the background image and the form
+    container = st.container()
+    
+    # Add the background image
+    container.image(image_file, use_column_width=True, output_format="auto", 
+                    caption="", clamp=False, channels="RGB")
 
     # Input fields for the distributor
     name = st.text_input("Name")
