@@ -58,8 +58,8 @@ def convert_csv_to_pdf(csv_file_path, pdf_file_path):
 # Function to display the Streamlit app
 def main():
     # Customize main heading color
-    st.title("Monthly Charity Fund for Poor People")
-    st.markdown("<style>.title { color: green; }</style>", unsafe_allow_html=True)
+    st.title("Report Monthly Charity Fund for Poor People")
+    st.markdown("<style>.title { color: green; }</style>") unsafe_allow_html=True)
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
