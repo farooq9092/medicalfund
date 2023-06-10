@@ -47,7 +47,7 @@ def main():
         """
         <style>
             body {
-                background-image: url('images.jpeg');
+                background-image: url('https://github.com/farooq9092/cmf/blob/main/images.jpeg');
                 background-size: cover;
             }
             .title {
