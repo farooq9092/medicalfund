@@ -48,7 +48,7 @@ def download_csv():
     with open("charity_fund_data.csv", "r") as file:
         csv_data = file.read()
     b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    href = f'<a href="data:text/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
     return href
 
 # Function to download the data as TXT
