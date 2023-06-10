@@ -1,9 +1,31 @@
 import streamlit as st
 import pandas as pd
+import requests
+
+GITHUB_API = 'https://api.github.com'
+OWNER = 'your_github_username'
+REPO = 'your_repository_name'
+BRANCH = 'main'
+FILE_PATH = 'charity_fund_data.csv'
 
 def create_csv(data):
     df = pd.DataFrame(data)
-    df.to_csv('charity_fund_data.csv', index=False)
+    csv_data = df.to_csv(index=False)
+    headers = {
+        'Authorization': 'Bearer YOUR_GITHUB_ACCESS_TOKEN',
+        'Accept': 'application/vnd.github.v3+json'
+    }
+    url = f'{GITHUB_API}/repos/{OWNER}/{REPO}/contents/{FILE_PATH}'
+    payload = {
+        'message': 'Create CSV file',
+        'content': csv_data,
+        'branch': BRANCH
+    }
+    response = requests.put(url, headers=headers, json=payload)
+    if response.status_code == 201:
+        st.success("CSV file created successfully!")
+    else:
+        st.error("Failed to create CSV file.")
 
 def main():
     st.title("Monthly Charity Fund for Poor People")
@@ -19,8 +41,6 @@ def main():
         else:
             new_data = {"Distributor Name": [distributor_name], "Medicine Name": [medicine_name], "Price": [price]}
             create_csv(new_data)
-            
-            st.success("Data saved successfully!")
 
 if __name__ == "__main__":
     main()
