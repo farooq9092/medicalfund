@@ -2,12 +2,13 @@ import streamlit as st
 import pandas as pd
 import base64
 import requests
+import io
 
 # Function to download the CSV file from GitHub
 def download_csv(csv_file_path):
     response = requests.get(csv_file_path)
     content = response.content.decode("utf-8")
-    df = pd.read_csv(pd.compat.StringIO(content))
+    df = pd.read_csv(io.StringIO(content))
     return df
 
 # Function to save the updated data to the CSV file on GitHub
