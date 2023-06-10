@@ -19,7 +19,7 @@ def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Please enter the following details:")
     
-    distributor_name = st.text_input("Distributor Name")
+    distributor_name = st.text_input(" Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
     
