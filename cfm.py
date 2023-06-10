@@ -59,7 +59,7 @@ def download_txt():
     href = f'<a href="data:text/plain;base64,{b64}" download="charity_data.txt">Download TXT File</a>'
     return href
 
-# Display the Streamlit app
+# Display the Streamlit apps
 def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Enter the details of the medicine distribution:")
