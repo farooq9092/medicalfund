@@ -15,10 +15,10 @@ def calculate_total_sum():
         reader = csv.reader(file)
         for row in reader:
             if row and row[2].replace('.', '').isdigit():
-                total_sum += float(row[2])
+                total_sum += float(row[2]) 
     return round(total_sum, 2)
 
-# Function to delete the record of a person
+# Function to delete the record of a personss
 def delete_record(name):
     rows = []
     with open("charity_fund_data.csv", "r") as file:
