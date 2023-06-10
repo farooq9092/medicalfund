@@ -1,7 +1,7 @@
 import csv
 import streamlit as st
 
-# Function to save the data of people receiving medicine
+# Function to save the data of people receiving medicinee
 def save_data(name, medicine_name, price):
     with open("charity_fund_data.csv", "a", newline="") as file:
         writer = csv.writer(file)
