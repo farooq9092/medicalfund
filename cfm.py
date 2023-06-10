@@ -1,10 +1,19 @@
 import streamlit as st
-import csv
+import pandas as pd
+import base64
 
-def save_data(distributor_name, medicine_name, price):
-    with open("charity_data.csv", "a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([distributor_name, medicine_name, price])
+# Function to download the CSV file from GitHub
+def download_csv():
+    csv_file_path = "https://raw.githubusercontent.com/your_username/your_repository/main/charity_data.csv"
+    return pd.read_csv(csv_file_path)
+
+# Function to save the updated data to the CSV file on GitHub
+def save_data(df):
+    csv_file_path = "https://raw.githubusercontent.com/your_username/your_repository/main/charity_data.csv"
+    csv_data = df.to_csv(index=False)
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    st.markdown(href, unsafe_allow_html=True)
 
 def main():
     st.title("Monthly Charity Fund for Poor People")
@@ -18,7 +27,16 @@ def main():
         if not distributor_name or not medicine_name or not price:
             st.error("Please fill in all fields.")
         else:
-            save_data(distributor_name, medicine_name, price)
+            # Download the current CSV file from GitHub
+            df = download_csv()
+            
+            # Add the new data to the DataFrame
+            new_data = {"Distributor Name": distributor_name, "Medicine Name": medicine_name, "Price": price}
+            df = df.append(new_data, ignore_index=True)
+            
+            # Save the updated DataFrame back to the CSV file on GitHub
+            save_data(df)
+            
             st.success("Data saved successfully!")
 
 if __name__ == "__main__":
