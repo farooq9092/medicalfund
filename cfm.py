@@ -4,12 +4,12 @@ import base64
 
 # Function to download the CSV file from GitHub
 def download_csv():
-    csv_file_path = "https://raw.githubusercontent.com/your_username/your_repository/main/charity_data.csv"
+    csv_file_path = "https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv"
     return pd.read_csv(csv_file_path)
 
 # Function to save the updated data to the CSV file on GitHub
 def save_data(df):
-    csv_file_path = "https://raw.githubusercontent.com/your_username/your_repository/main/charity_data.csv"
+    csv_file_path = "https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv"
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
