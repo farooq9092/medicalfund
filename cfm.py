@@ -15,7 +15,7 @@ def download_csv(csv_file_path):
 def save_data(df, csv_file_path):
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_path}">Download CSV File</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="{https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv}">Download CSV File</a>'
     st.markdown(href, unsafe_allow_html=True)
 
 def main():
@@ -31,7 +31,7 @@ def main():
             st.error("Please fill in all fields.")
         else:
             # Download the current CSV file from GitHub
-            csv_file_path = "https://raw.githubusercontent.com/farooq9092/cmf/main/charity_fund_data.csv"
+            csv_file_path = "https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv"
             df = download_csv(csv_file_path)
             
             # Add the new data to the DataFrame
