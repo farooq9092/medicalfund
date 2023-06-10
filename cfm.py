@@ -1,6 +1,7 @@
 import csv
 import streamlit as st
 import base64
+from flask import send_file
 
 # Set page config to wide layout
 st.set_page_config(layout="wide")
@@ -72,24 +73,12 @@ def delete_record(name):
 def download_csv():
     with open("charity_fund_data.csv", "r") as file:
         csv_data = file.read()
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="charity_fund_data.csv">Download CSV File</a>'
-    return href
+    return csv_data
 
 # Function to display the Streamlit app
 def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Enter the details of the medicine distribution:")
-
-    # Add your image file name in the background image URL
-    image_file = "images.jpeg"
-    
-    # Create a container for the background image and the form
-    container = st.container()
-    
-    # Add the background image
-    container.image(image_file, use_column_width=True, output_format="auto", 
-                    caption="", clamp=False, channels="RGB")
 
     # Input fields for the distributor
     name = st.text_input("Name")
@@ -120,8 +109,19 @@ def main():
 
     # Download the CSV file when the "Download CSV" button is clicked
     if st.button("Download CSV"):
-        href = download_csv()
+        csv_data = download_csv()
+        b64 = base64.b64encode(csv_data.encode()).decode()
+        href = f'<a href="data:file/csv;base64,{b64}" download="charity_fund_data.csv">Download CSV File</a>'
         st.markdown(href, unsafe_allow_html=True)
+
+    # Download the CSV file on mobile devices
+    if st.button("Download CSV (Mobile)"):
+        csv_data = download_csv()
+        with open("charity_fund_data.csv", "w") as file:
+            file.write(csv_data)
+        st.write("Downloading CSV file...")
+        path = "charity_fund_data.csv"
+        return send_file(path, as_attachment=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
