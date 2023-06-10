@@ -1,25 +1,29 @@
 import streamlit as st
 import pandas as pd
 import base64
+import requests
 
 # Function to download the CSV file from GitHub
 def download_csv():
-    csv_file_path = "https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv"
-    return pd.read_csv(csv_file_path)
+    csv_url = "https://raw.githubusercontent.com/farooq9092/cmf/main/charity_fund_data.csv"
+    response = requests.get(csv_url)
+    content = response.content.decode("utf-8")
+    df = pd.read_csv(pd.compat.StringIO(content))
+    return df
 
 # Function to save the updated data to the CSV file on GitHub
 def save_data(df):
-    csv_file_path = "https://github.com/farooq9092/cmf/blob/main/charity_fund_data.csv"
+    csv_file_path = "charity_fund_data.csv"
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_path}">Download CSV File</a>'
     st.markdown(href, unsafe_allow_html=True)
 
 def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Please enter the following details:")
     
-    distributor_name = st.text_input(" Name")
+    distributor_name = st.text_input("Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
     
