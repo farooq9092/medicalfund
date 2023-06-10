@@ -42,11 +42,24 @@ def download_csv():
 
 # Function to display the Streamlit app
 def main():
-    st.title(" Report Monthly Charity Fund for Poor People")
-    st.markdown("Enter the details of the people:")
+    # Add background image
+    st.markdown(
+        """
+        <style>
+            body {
+                background-image: url('images.jpeg');
+                background-size: cover;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    # Input fields for the  poor people
-    name = st.text_input(" Name")
+    st.title("Monthly Charity Fund for Poor People")
+    st.markdown("Enter the details of the medicine distribution:")
+
+    # Input fields for the distributor
+    name = st.text_input("Distributor Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
 
