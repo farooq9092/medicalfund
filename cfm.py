@@ -8,6 +8,16 @@ def save_data(name, medicine_name, price):
         writer = csv.writer(file)
         writer.writerow([name, medicine_name, price])
 
+# Function to calculate the total sum of prices
+def calculate_total_sum():
+    total_sum = 0
+    with open("charity_fund_data.csv", "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row and row[2].isdigit():
+                total_sum += int(row[2])
+    return total_sum
+
 # Function to download the CSV file
 def download_csv():
     with open("charity_fund_data.csv", "r") as file:
@@ -22,7 +32,7 @@ def main():
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
-    name = st.text_input("Name")
+    name = st.text_input("Distributor Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
 
@@ -37,6 +47,10 @@ def main():
         reader = csv.reader(file)
         data = list(reader)
         st.table(data)
+
+    # Calculate and display the total sum of prices
+    total_sum = calculate_total_sum()
+    st.markdown(f"## Total Sum of Prices: {total_sum}")
 
     # Download the CSV file when the "Download" button is clicked
     if st.button("Download CSV"):
