@@ -1,6 +1,7 @@
 import csv
 import streamlit as st
 import base64
+
 # Set page config to wide layout
 st.set_page_config(layout="wide")
 
@@ -36,21 +37,30 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-    # Add your image file name in the background image URL
-    image_file = "images.jpeg"
-    
-    # Create a container for the background image and the form
-    container = st.container()
-    
-    # Add the background image
-    container.image(image_file, use_column_width=True, output_format="auto", 
-                    caption="", clamp=False, channels="RGB")
+
+# Add your image file name in the background image URL
+image_file = "images.jpeg"
+
+# Create a container for the background image and the form
+container = st.container()
+
+# Add the background image
+container.image(
+    image_file,
+    use_column_width=True,
+    output_format="auto",
+    caption="",
+    clamp=False,
+    channels="RGB"
+)
+
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
     with open("charity_fund_data.csv", "a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([name, medicine_name, price])
+
 
 # Function to calculate the total sum of prices
 def calculate_total_sum():
@@ -61,6 +71,7 @@ def calculate_total_sum():
             if row and row[2].replace('.', '').isdigit():
                 total_sum += float(row[2])
     return round(total_sum, 2)
+
 
 # Function to delete the record of a person
 def delete_record(name):
@@ -76,6 +87,7 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
+
 # Function to download the CSV file
 def download_csv():
     with open("charity_fund_data.csv", "r") as file:
@@ -84,6 +96,7 @@ def download_csv():
     href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
     return href
 
+
 # Function to display the Streamlit app
 def main():
     # Add background image using CSS
@@ -91,7 +104,7 @@ def main():
         """
         <style>
             body {
-                background-image: url('https://example.com/images/images.jpeg');
+                background-image: url('');
                 background-size: cover;
             }
         </style>
@@ -134,6 +147,7 @@ def main():
     # Download CSV file
     download_link = download_csv()
     st.markdown(download_link, unsafe_allow_html=True)
+
 
 # Run the Streamlit app
 if __name__ == "__main__":
