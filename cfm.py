@@ -96,7 +96,7 @@ def main():
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("Enter the details of the medicine distribution:")
       # Add your image file name in the background image URL
-    image_file = "Aafia-Siddiqui.jpg"
+    image_file = "images.jpeg"
     
     # Create a container for the background image and the form
     container = st.container()
