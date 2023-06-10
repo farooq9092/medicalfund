@@ -1,20 +1,14 @@
 import streamlit as st
 import pandas as pd
 import base64
-import requests
-import io
 
-# Function to download the CSV file from GitHub
-def download_csv():
-    csv_url = "https://raw.githubusercontent.com/farooq9092/cmf/main/charity_fund_data.csv"
-    response = requests.get(csv_url)
-    content = response.content.decode("utf-8")
-    df = pd.read_csv(io.StringIO(content))
+# Function to read the CSV file
+def read_csv(file):
+    df = pd.read_csv(file)
     return df
 
-# Function to save the updated data to the CSV file on GitHub
-def save_data(df):
-    csv_file_path = "charity_fund_data.csv"
+# Function to save the updated data to a new CSV file
+def save_data(df, csv_file_path):
     csv_data = df.to_csv(index=False)
     b64 = base64.b64encode(csv_data.encode()).decode()
     href = f'<a href="data:file/csv;base64,{b64}" download="{csv_file_path}">Download CSV File</a>'
@@ -22,27 +16,46 @@ def save_data(df):
 
 def main():
     st.title("Monthly Charity Fund for Poor People")
-    st.markdown("Please enter the following details:")
+    st.markdown("Please upload two CSV files:")
     
-    distributor_name = st.text_input("Name")
-    medicine_name = st.text_input("Medicine Name")
-    price = st.number_input("Price")
+    # File upload
+    csv_file1 = st.file_uploader("Upload CSV File 1", type=["csv"])
+    csv_file2 = st.file_uploader("Upload CSV File 2", type=["csv"])
     
-    if st.button("Submit"):
-        if not distributor_name or not medicine_name or not price:
-            st.error("Please fill in all fields.")
-        else:
-            # Download the current CSV file from GitHub
-            df = download_csv()
-            
-            # Add the new data to the DataFrame
-            new_data = {"Distributor Name": distributor_name, "Medicine Name": medicine_name, "Price": price}
-            df = df.append(new_data, ignore_index=True)
-            
-            # Save the updated DataFrame back to the CSV file on GitHub
-            save_data(df)
-            
-            st.success("Data saved successfully!")
+    if csv_file1 is not None and csv_file2 is not None:
+        # Read the CSV files
+        df1 = read_csv(csv_file1)
+        df2 = read_csv(csv_file2)
+        
+        st.markdown("---")
+        st.subheader("CSV File 1")
+        st.write(df1)
+        
+        st.markdown("---")
+        st.subheader("CSV File 2")
+        st.write(df2)
+        
+        # Perform operations on CSV File 1
+        st.markdown("---")
+        st.subheader("Operations on CSV File 1")
+        # Add your code here to perform operations on df1
+        
+        # Perform operations on CSV File 2
+        st.markdown("---")
+        st.subheader("Operations on CSV File 2")
+        # Add your code here to perform operations on df2
+        
+        # Save the updated data
+        st.markdown("---")
+        if st.button("Save CSV File 1"):
+            # Save CSV File 1
+            save_data(df1, "file1.csv")
+            st.success("CSV File 1 saved successfully!")
+        
+        if st.button("Save CSV File 2"):
+            # Save CSV File 2
+            save_data(df2, "file2.csv")
+            st.success("CSV File 2 saved successfully!")
 
 if __name__ == "__main__":
     main()
