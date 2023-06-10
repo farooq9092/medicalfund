@@ -42,18 +42,14 @@ def download_csv():
 
 # Function to display the Streamlit app
 def main():
-    # Add background image using CSS
-    st.markdown(
-        """
-        <style>
-            body {
-            background-image: url('file:///home/farooq/Desktop/New%20Folder%201/images.jpeg')
-                background-size: cover;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    image_file = "images.jpeg"
+    
+    # Create a container for the background image and the form
+    container = st.container()
+    
+    # Add the background image
+    container.image(image_file, use_column_width=True, output_format="auto", 
+                    caption="", clamp=False, channels="RGB")
 
     # Customize main heading color
     st.title("Monthly Charity Fund for Poor People")
