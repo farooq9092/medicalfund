@@ -1,7 +1,6 @@
 import csv
 import streamlit as st
 import base64
-from flask import send_file
 
 # Set page config to wide layout
 st.set_page_config(layout="wide")
@@ -120,8 +119,6 @@ def main():
         with open("charity_fund_data.csv", "w") as file:
             file.write(csv_data)
         st.write("Downloading CSV file...")
-        path = "charity_fund_data.csv"
-        return send_file(path, as_attachment=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
