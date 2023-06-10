@@ -14,9 +14,23 @@ def calculate_total_sum():
     with open("charity_fund_data.csv", "r") as file:
         reader = csv.reader(file)
         for row in reader:
-            if row and row[2].isdigit():
-                total_sum += int(row[2])
-    return total_sum
+            if row and row[2].replace('.', '').isdigit():
+                total_sum += float(row[2])
+    return round(total_sum, 2)
+
+# Function to delete the record of a person
+def delete_record(name):
+    rows = []
+    with open("charity_fund_data.csv", "r") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if row and row[0] == name:
+                continue
+            rows.append(row)
+
+    with open("charity_fund_data.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerows(rows)
 
 # Function to download the CSV file
 def download_csv():
@@ -51,6 +65,12 @@ def main():
     # Calculate and display the total sum of prices
     total_sum = calculate_total_sum()
     st.markdown(f"## Total Sum of Prices: {total_sum}")
+
+    # Delete the record of a person
+    delete_name = st.text_input("Enter the name to delete the record")
+    if st.button("Delete Record"):
+        delete_record(delete_name)
+        st.success("Record deleted successfully!")
 
     # Download the CSV file when the "Download" button is clicked
     if st.button("Download CSV"):
