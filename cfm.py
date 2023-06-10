@@ -1,7 +1,6 @@
 import csv
 import streamlit as st
 import base64
-from fpdf import FPDF
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
@@ -33,37 +32,36 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
-# Function to convert CSV to PDF
-def convert_csv_to_pdf(csv_file_path, pdf_file_path):
-    pdf = FPDF()
-    pdf.add_page()
-
-    # Set font and size
-    pdf.set_font("Arial", size=12)
-
-    # Open CSV file and read data
-    with open(csv_file_path, "r") as file:
-        reader = csv.reader(file)
-        data = list(reader)
-
-    # Add data to PDF table
-    for row in data:
-        for item in row:
-            pdf.cell(40, 10, str(item), 1)
-        pdf.ln()
-
-    # Save PDF file
-    pdf.output(pdf_file_path)
+# Function to download the CSV file
+def download_csv():
+    with open("charity_fund_data.csv", "r") as file:
+        csv_data = file.read()
+    b64 = base64.b64encode(csv_data.encode()).decode()
+    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+    return href
 
 # Function to display the Streamlit app
 def main():
+    # Add background image using CSS
+    st.markdown(
+        """
+        <style>
+            body {
+                background-image: url('https://example.com/images/images.jpeg');
+                background-size: cover;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
     # Customize main heading color
-    st.title("Report Monthly Charity Fund for Poor People")
-    st.markdown("<style>.title { color: green; }</style>",unsafe_allow_html=True)
+    st.title("Monthly Charity Fund for Poor People")
+    st.markdown("<style>.title { color: green; }</style>", unsafe_allow_html=True)
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
-    name = st.text_input(" Name")
+    name = st.text_input("Distributor Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
 
@@ -89,15 +87,9 @@ def main():
         delete_record(delete_name)
         st.success("Record deleted successfully!")
 
-    # Download PDF file
-    if st.button("Download PDF"):
-        csv_file_path = "charity_fund_data.csv"
-        pdf_file_path = "charity_fund_data.pdf"
-        convert_csv_to_pdf(csv_file_path, pdf_file_path)
-        with open(pdf_file_path, "rb") as file:
-            b64 = base64.b64encode(file.read()).decode()
-            href = f'<a href="data:application/pdf;base64,{b64}" download="charity_data.pdf">Download PDF File</a>'
-            st.markdown(href, unsafe_allow_html=True)
+    # Download CSV file
+    download_link = download_csv()
+    st.markdown(download_link, unsafe_allow_html=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
