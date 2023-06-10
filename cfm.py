@@ -1,6 +1,7 @@
 import csv
 import streamlit as st
 import base64
+from fpdf import FPDF
 
 # Set page config to wide layout
 st.set_page_config(layout="wide")
@@ -88,30 +89,28 @@ def delete_record(name):
         writer.writerows(rows)
 
 
-# Function to download the CSV file
-def download_csv():
+# Function to download the PDF file
+def download_pdf():
+    pdf = FPDF()
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.set_font("Arial", size=12)
+
     with open("charity_fund_data.csv", "r") as file:
-        csv_data = file.read()
-    b64 = base64.b64encode(csv_data.encode()).decode()
-    href = f'<a href="data:file/csv;base64,{b64}" download="charity_data.csv">Download CSV File</a>'
+        reader = csv.reader(file)
+        for row in reader:
+            pdf.cell(40, 10, " | ".join(row), ln=True)
+
+    pdf.output("charity_data.pdf")
+
+    with open("charity_data.pdf", "rb") as file:
+        pdf_data = file.read()
+    b64 = base64.b64encode(pdf_data).decode()
+    href = f'<a href="data:application/pdf;base64,{b64}" download="charity_data.pdf">Download PDF File</a>'
     return href
 
 
 # Function to display the Streamlit app
 def main():
-    # Add background image using CSS
-    st.markdown(
-        """
-        <style>
-            body {
-                background-image: url('https://github.com/farooq9092/cmf/blob/main/images.jpeg');
-                background-size: cover;
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
-
     # Customize main heading color
     st.title("Monthly Charity Fund for Poor People")
     st.markdown("<style>.title { color: green; }</style>", unsafe_allow_html=True)
@@ -144,8 +143,8 @@ def main():
         delete_record(delete_name)
         st.success("Record deleted successfully!")
 
-    # Download CSV file
-    download_link = download_csv()
+    # Download PDF file
+    download_link = download_pdf()
     st.markdown(download_link, unsafe_allow_html=True)
 
 
