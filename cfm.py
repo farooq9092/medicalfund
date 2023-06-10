@@ -1,7 +1,7 @@
 import csv
 import streamlit as st
 import base64
-from fpdf import FPDF
+from reportlab.pdfgen import canvas
 
 # Set page config to wide layout
 st.set_page_config(layout="wide")
@@ -91,16 +91,15 @@ def delete_record(name):
 
 # Function to download the PDF file
 def download_pdf():
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.set_font("Arial", size=12)
-
+    pdf = canvas.Canvas("charity_data.pdf")
     with open("charity_fund_data.csv", "r") as file:
         reader = csv.reader(file)
+        y = 700
         for row in reader:
-            pdf.cell(40, 10, " | ".join(row), ln=True)
-
-    pdf.output("charity_data.pdf")
+            if row:
+                pdf.drawString(50, y, " | ".join(row))
+                y -= 20
+    pdf.save()
 
     with open("charity_data.pdf", "rb") as file:
         pdf_data = file.read()
