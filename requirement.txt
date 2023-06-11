@@ -1,4 +1,0 @@
-pdfdocument==3.6.1
-pandas
-fpdf
-
