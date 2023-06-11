@@ -1,5 +1,8 @@
 import csv
 import streamlit as st
+import base64
+import pandas as pd
+from fpdf import FPDF
 
 # Function to save the data of people receiving medicine
 def save_data(name, medicine_name, price):
@@ -31,13 +34,37 @@ def delete_record(name):
         writer = csv.writer(file)
         writer.writerows(rows)
 
-# Display the Streamlit app
+# Function to convert CSV to PDF
+def convert_csv_to_pdf(csv_file_path, pdf_file_path):
+    df = pd.read_csv(csv_file_path)
+    pdf = FPDF()
+    pdf.add_page()
+
+    # Set font and size
+    pdf.set_font("Arial", size=12)
+
+    # Add data to PDF table
+    for column in df.columns:
+        pdf.cell(40, 10, column, 1)
+    pdf.ln()
+
+    for _, row in df.iterrows():
+        for value in row.values:
+            pdf.cell(40, 10, str(value), 1)
+        pdf.ln()
+
+    # Save PDF file
+    pdf.output(pdf_file_path)
+
+# Function to display the Streamlit app
 def main():
+    # Customize main heading color
     st.title("Monthly Charity Fund for Poor People")
+    st.markdown("<style>.title { color: green; }</style>", unsafe_allow_html=True)
     st.markdown("Enter the details of the medicine distribution:")
 
     # Input fields for the distributor
-    name = st.text_input("Name")
+    name = st.text_input("Distributor Name")
     medicine_name = st.text_input("Medicine Name")
     price = st.number_input("Price")
 
@@ -63,15 +90,15 @@ def main():
         delete_record(delete_name)
         st.success("Record deleted successfully!")
 
-    # Provide external download links
-    if st.button("Download CSV"):
-        st.markdown("Download CSV file from the link below:")
-        csv_link = "https://your-cloud-storage-service.com/charity_data.csv"
-        st.markdown(f"[Download CSV](csv_link)")
-    if st.button("Download TXT"):
-        st.markdown("Download TXT file from the link below:")
-        txt_link = "https://your-cloud-storage-service.com/charity_data.txt"
-        st.markdown(f"[Download TXT](txt_link)")
+    # Download PDF file
+    if st.button("Download PDF"):
+        csv_file_path = "charity_fund_data.csv"
+        pdf_file_path = "charity_fund_data.pdf"
+        convert_csv_to_pdf(csv_file_path, pdf_file_path)
+        with open(pdf_file_path, "rb") as file:
+            b64 = base64.b64encode(file.read()).decode()
+            href = f'<a href="data:application/pdf;base64,{b64}" download="charity_data.pdf">Download PDF File</a>'
+            st.markdown(href, unsafe_allow_html=True)
 
 # Run the Streamlit app
 if __name__ == "__main__":
